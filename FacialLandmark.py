@@ -2,6 +2,9 @@ import cv2
 import numpy as np
 import dlib
 
+webcam = True   # if want use webcam
+cap = cv2.VideoCapture(0)
+
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat')
 
@@ -32,8 +35,13 @@ def createBox(img, points, scale = 5, masked = False, cropped = True):
 
 
 while True:
-  img = cv2.imread('Bae Suzy.jpg')
-  img = cv2.resize(img, (0, 0), None, 0.5, 0.5)
+
+  if webcam:
+    success, img = cap.read()
+    img = cv2.resize(img, (0, 0), None, 1, 1)
+  else:
+    img = cv2.imread('Bae Suzy.jpg')
+    img = cv2.resize(img, (0, 0), None, 0.5, 0.5)
   imgOriginal = img.copy()
   imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
   faces = detector(imgGray)
@@ -80,4 +88,6 @@ while True:
     print(myPoints)
 
   cv2.imshow('Original', imgOriginal)
-  cv2.waitKey(1)
+  keyTerminate = cv2.waitKey(1) & 0xFF
+  if keyTerminate == 27 or keyTerminate == ord('q'):
+    break
