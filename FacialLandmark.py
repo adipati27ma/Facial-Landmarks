@@ -49,7 +49,7 @@ for face in faces:
 
   #* color the region (lips)
   imgColorLips = np.zeros_like(imgLips)
-  imgColorLips[:] = 25, 25, 255
+  imgColorLips[:] = 153, 0, 157
   imgColorLips = cv2.bitwise_and(imgLips, imgColorLips)
   imgColorLips = cv2.GaussianBlur(imgColorLips, (7, 7), 10)   # blur the image
 
