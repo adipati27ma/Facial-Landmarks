@@ -6,8 +6,13 @@ detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat')
 
 def createBox(img, points, scale = 5):
-  bBox = cv2.boundingRect(points)
-  x, y, w, h = bBox
+  mask = np.zeros_like(img)
+  mask = cv2.fillPoly(mask, [points], (255, 255, 255)) # fill the exact points
+  img = cv2.bitwise_and(img, mask)
+  cv2.imshow('Mask', img)
+  
+  bBox = cv2.boundingRect(points) # return 4 values of points
+  x, y, w, h = bBox # left, top, right, bottom
   imgCrop = img[y-5:y+h+5, x-5:x+w+5]
   imgCrop = cv2.resize(imgCrop, (0, 0), None, scale, scale)
   return imgCrop
@@ -34,9 +39,10 @@ for face in faces:
   
   # convert to numpy array
   myPoints = np.array(myPoints)
-  imgLeftEye = createBox(img, myPoints[36:42]) # right-side array is excluded
+
+  # imgLeftEye = createBox(img, myPoints[36:42]) # right-side array is excluded
   imgLips = createBox(img, myPoints[48:61], 3)
-  cv2.imshow('Left Eye', imgLeftEye)
+  # cv2.imshow('Left Eye', imgLeftEye)
   cv2.imshow('Lips', imgLips)
   print(myPoints)
 
