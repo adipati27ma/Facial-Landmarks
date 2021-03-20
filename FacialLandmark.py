@@ -31,7 +31,7 @@ faces = detector(imgGray)
 for face in faces:
   x1, y1 = face.left(), face.top()
   x2, y2 = face.right(), face.bottom()
-  imgOriginal = cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+  # imgOriginal = cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
   landmarks = predictor(imgGray, face)
   myPoints = []
   for n in range(68):
@@ -49,10 +49,15 @@ for face in faces:
 
   #* color the region (lips)
   imgColorLips = np.zeros_like(imgLips)
-  imgColorLips[:] = 153, 0, 157
+  imgColorLips[:] = 25, 25, 255
   imgColorLips = cv2.bitwise_and(imgLips, imgColorLips)
   imgColorLips = cv2.GaussianBlur(imgColorLips, (7, 7), 10)   # blur the image
-  imgColorLips = cv2.addWeighted(imgOriginal, 1, imgColorLips, 0.4, 0)    # add base on their weights
+
+  #* gray image
+  imgOriginalGray = cv2.cvtColor(imgOriginal, cv2.COLOR_BGR2GRAY)
+  imgOriginalGray = cv2.cvtColor(imgOriginalGray, cv2.COLOR_GRAY2BGR)   # back to 3 channels color
+  
+  imgColorLips = cv2.addWeighted(imgOriginalGray, 1, imgColorLips, 0.4, 0)    # add base on their weights
   cv2.imshow('Colored', imgColorLips)
 
 
