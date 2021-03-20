@@ -29,12 +29,15 @@ for face in faces:
     x = landmarks.part(n).x
     y = landmarks.part(n).y
     myPoints.append([x, y])
-    cv2.circle(imgOriginal, (x, y), 2, (50, 50, 255), cv2.FILLED)
+    # cv2.circle(imgOriginal, (x, y), 2, (50, 50, 255), cv2.FILLED)
     # cv2.putText(imgOriginal, str(n), (x, y-10), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0, 0, 255), 1)
   
+  # convert to numpy array
   myPoints = np.array(myPoints)
-  imgLeftEye = createBox(img, myPoints[36:42])
+  imgLeftEye = createBox(img, myPoints[36:42]) # right-side array is excluded
+  imgLips = createBox(img, myPoints[48:61], 3)
   cv2.imshow('Left Eye', imgLeftEye)
+  cv2.imshow('Lips', imgLips)
   print(myPoints)
 
 cv2.imshow('Original', imgOriginal)
